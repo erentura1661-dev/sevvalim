@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Şevvalim ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffe5ec, #ffb3c6);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 75, 110, 0.2);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            z-index: 10;
+            border: 2px solid #ff85a1;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #ff477e;
+            font-size: 1.8rem;
+            margin: 10px 0;
+        }
+
+        .bears-walking {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 65px;
+            margin-bottom: 10px;
+            animation: yuru 1.2s ease-in-out infinite alternate;
+        }
+
+        .btn-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            min-height: 150px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        #yesBtn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            z-index: 999;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #noBtn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            z-index: 1000;
+            transition: left 0.2s ease, top 0.2s ease, transform 0.2s ease;
+        }
+
+        /* 5. basışta TÜM EKRANI tamamen kaplayacak olan Evet sınıfı */
+        #yesBtn.fullscreen {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            transform: scale(1) !important;
+            font-size: 3rem !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            box-shadow: none !important;
+            z-index: 99999 !important;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff7096;
+            font-size: 24px;
+            pointer-events: none;
+            animation: yukariUç linear infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes yuru {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-12px); }
+        }
+
+        @keyframes yukariUç {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <div class="bears-walking">
+            <span>🧸</span><span>🤝</span><span>🧸</span>
+        </div>
+
+        <h1 id="questionText">Şevvalim beni affeder misin? 🥺</h1>
+
+        <div class="btn-container">
+            <button class="btn" id="yesBtn" onclick="affetti()">Evet</button>
+            <button class="btn" id="noBtn" onclick="kac(event)" ontouchend="kac(event)">Hayır</button>
+        </div>
+    </div>
+
+    <script>
+        let yesScale = 1;
+        let noClicks = 0;
+        const maxClicks = 5; 
+
+        function kac(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            noClicks++;
+            
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const questionText = document.getElementById('questionText');
+
+            if (noClicks >= maxClicks) {
+                noBtn.style.display = 'none';
+                yesBtn.classList.add('fullscreen');
+                yesBtn.innerHTML = "EVET ❤️";
+                questionText.innerHTML = "Sadece EVET diyebilirsin! 🥰";
+                return;
+            }
+
+            // GÜVENLİ HAVUZ MANTIĞI:
+            // Butonun ekran dışına taşmasını kesinlikle engellemek için merkez odaklı sınırlar koyduk
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // Ekranın tam kenarlarına gitmesin, orta alanda (%20 ile %80 arası) zıplasın
+            const randomX = (screenWidth * 0.2) + Math.random() * (screenWidth * 0.5);
+            const randomY = (screenHeight * 0.2) + Math.random() * (screenHeight * 0.5);
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Evet butonunu orantılı büyütüyoruz
+            yesScale += 1.1; 
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // Hayır butonu küçülerek menzil dışına taşmayı iyice zorlaştırıyor
+            let noScale = 1 - (noClicks * 0.08);
+            noBtn.style.transform = `scale(${noScale})`;
+
+            if (noClicks === 1) {
+                questionText.innerHTML = "Lütfen ama... 💔";
+                noBtn.innerHTML = "Emin misin?";
+            } else if (noClicks === 2) {
+                questionText.innerHTML = "İnat etme sevgilim... 👉👈";
+                noBtn.innerHTML = "Son kararın mı?";
+            } else if (noClicks === 3) {
+                questionText.innerHTML = "Bak gitgide büyüyor! 🥰";
+                noBtn.innerHTML = "Hala mı hayır?";
+            } else if (noClicks === 4) {
+                questionText.innerHTML = "Son şansındı, kaçış yok! 💖";
+                noBtn.innerHTML = "Tıkla da gör :)";
+            }
+        }
+
+        function affetti() {
+            const yesBtn = document.getElementById('yesBtn');
+            yesBtn.classList.remove('fullscreen');
+
+            const container = document.getElementById('mainContainer');
+            
+            container.style.position = 'fixed';
+            container.style.width = '100vw';
+            container.style.height = '100vh';
+            container.style.maxWidth = '100%';
+            container.style.borderRadius = '0';
+            container.style.justifyContent = 'center';
+            container.style.zIndex = '999999';
+
+            container.innerHTML = `
+                <div style="font-size: 90px; margin-bottom: 20px; animation: yuru 0.4s infinite alternate;">💖🧸💖</div>
+                <h1 style="font-size: 2.3rem; color: #ff0a54; line-height: 1.6; font-weight: bold; padding: 20px; max-width: 600px;">
+                    Teşekkürr ederimm aşkımm affediceğini biliyordummm ❤️
+                </h1>
+            `;
+            setInterval(createSingleHeart, 60);
+        }
+
+        function kalpleriOlustur() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(createSingleHeart, i * 400);
+            }
+        }
+
+        function createSingleHeart() {
+            const kalp = document.createElement('div');
+            kalp.classList.add('heart');
+            kalp.innerHTML = '❤️';
+            kalp.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 3 + 3;
+            kalp.style.animationDuration = duration + 's';
+            kalp.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            document.body.appendChild(kalp);
+            setTimeout(() => { kalp.remove(); }, duration * 1000);
+        }
+
+        kalpleriOlustur();
+        setInterval(kalpleriOlustur, 6000);
+    </script>
+</body>
+</html>
